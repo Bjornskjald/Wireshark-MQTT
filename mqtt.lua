@@ -19,7 +19,6 @@
 do
 	-- Create a new dissector
 	MQTTPROTO = Proto("MQTT-FB", "Facebook MQTT")
-	local bitw = require("bit")
 	local f = MQTTPROTO.fields
 	-- Fix header: byte 1
 	f.message_type = ProtoField.uint8("mqttfb.message_type", "Message Type", base.HEX, nil, 0xF0)
@@ -66,9 +65,9 @@ do
 		repeat
 			 digit = buffer(offset, 1):uint()
 			 offset = offset + 1
-			 value = value + bitw.band(digit,127) * multiplier
+			 value = value + bit32.band(digit,127) * multiplier
 			 multiplier = multiplier * 128
-		until (bitw.band(digit,128) == 0)
+		until (bit32.band(digit,128) == 0)
 		return offset, value
 	end
 
